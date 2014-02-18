@@ -1,4 +1,5 @@
 ##  TerrainControl
+<em>Please note that this is a personal fork of the TerrainControl repository which aims to fix https://github.com/Wickth/TerrainControl/issues/151 and https://github.com/Wickth/TerrainControl/issues/125, though possibly resulting in reduced performance when generating chunks.</em>
 
 TerrainControl is an advanced world generator for Minecraft. Through various configuration files it gives the user control over almost every aspect of Minecraft terrain generation, with no knowledge of Java required. It can be used on Bukkit or Forge servers and on singleplayer with Forge. Terrain Control is the successor to the old <a href="http://www.minecraftforum.net/topic/313991-phoenixterrainmod/">PhoenixTerrainMod</a>, which was based on the popular <a href="http://www.minecraftforum.net/topic/71565-biomemod/">BiomeTerrainMod</a>. Terrain Control is maintained by <a href="http://dev.bukkit.org/profiles/Khoorn/">Khoorn</a> (known as <a href="/Wickth">Wickth</a> on GitHub).
 
