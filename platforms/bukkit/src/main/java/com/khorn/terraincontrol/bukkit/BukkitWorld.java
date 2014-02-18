@@ -269,18 +269,18 @@ public class BukkitWorld implements LocalWorld
     @Override
     public void replaceBlocks()
     {
-        if (this.settings.BiomeConfigsHaveReplacement)
+        /*if (this.settings.BiomeConfigsHaveReplacement)
         {
             // See the comment in replaceBiomes for an explanation of this
             replaceBlocks(this.chunkCache[0], 8, 8);
             replaceBlocks(this.chunkCache[1], 0, 8);
             replaceBlocks(this.chunkCache[2], 8, 0);
             replaceBlocks(this.chunkCache[3], 0, 0);
-        }
+        }*/
     }
 
     private void replaceBlocks(Chunk rawChunk, int startXInChunk, int startZInChunk)
-    {
+    {/*
         int endXInChunk = startXInChunk + 8;
         int endZInChunk = startZInChunk + 8;
 
@@ -315,6 +315,56 @@ public class BukkitWorld implements LocalWorld
 
                             section.setTypeId(sectionX, sectionY, sectionZ, replaceTo);
                             section.setData(sectionX, sectionY, sectionZ, replaceToId & 0xF);
+                        }
+                    }
+                }
+            }
+        }*/
+    }
+    
+    // This part work with ReplacedBlocks after all spawns
+    // TODO: check how its work.
+    public void replaceBlocks(int chunk_x, int chunk_z)
+    {
+        if (this.settings.BiomeConfigsHaveReplacement)
+        {
+            Chunk rawChunk = this.world.getChunkAt(chunk_x, chunk_z);
+
+            ChunkSection[] sectionsArray = rawChunk.i();
+
+            byte[] ChunkBiomes = rawChunk.m();
+
+            int x = this.currentChunkX * 16;
+            int z = this.currentChunkZ * 16;
+
+            for (ChunkSection section : sectionsArray)
+            {
+                if (section == null)
+                    continue;
+
+                for (int sectionX = 0; sectionX < 16; sectionX++)
+                {
+                    for (int sectionZ = 0; sectionZ < 16; sectionZ++)
+                    {
+                        BiomeConfig biomeConfig = this.settings.biomeConfigs[ChunkBiomes[(sectionZ << 4) | sectionX] & 0xFF];
+                        if (biomeConfig != null && biomeConfig.ReplaceCount > 0)
+                        {
+                            for (int sectionY = 0; sectionY < 16; sectionY++)
+                        {
+                            Block block = section.getTypeId(sectionX, sectionY, sectionZ);
+                            int blockId = Block.b(block);
+                            if (biomeConfig.replaceMatrixBlocks[blockId] == null)
+                                continue;
+
+                            int replaceToId = biomeConfig.replaceMatrixBlocks[blockId][section.getYPosition() + sectionY];
+                            if (replaceToId == -1 || (replaceToId >> 4) == blockId)
+                                continue;
+
+                            Block replaceTo = Block.e(replaceToId >> 4);
+
+                            section.setTypeId(sectionX, sectionY, sectionZ, replaceTo);
+                            section.setData(sectionX, sectionY, sectionZ, replaceToId & 0xF);
+                        }
                         }
                     }
                 }

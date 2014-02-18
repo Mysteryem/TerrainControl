@@ -24,6 +24,6 @@ public class TCBlockPopulator extends BlockPopulator
     public void populate(World world, Random random, Chunk chunk)
     {
         this.world.LoadChunk(((CraftChunk) chunk).getHandle());
-        this.spawner.populate(chunk.getX(), chunk.getZ());
+        //this.spawner.populate(chunk.getX(), chunk.getZ());
     }
 }

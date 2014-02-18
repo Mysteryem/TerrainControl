@@ -15,7 +15,12 @@ import org.bukkit.event.world.StructureGrowEvent;
 import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 
+import org.bukkit.event.world.ChunkPopulateEvent;
+import com.khorn.terraincontrol.generator.ObjectSpawner;
+
 import java.util.Random;
+import java.util.logging.Level;
+import org.bukkit.event.world.ChunkLoadEvent;
 
 public class TCListener implements Listener
 {
@@ -133,5 +138,29 @@ public class TCListener implements Listener
             tcSender.send(player);
         }
     }
-
+    
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void afterChunkGenerate(ChunkLoadEvent event){
+        if (event.isNewChunk()){
+            BukkitWorld bukkitWorld = this.tcPlugin.worlds.get(event.getWorld().getUID());
+            if (bukkitWorld != null)
+            {
+                bukkitWorld.replaceBlocks(event.getChunk().getX(),event.getChunk().getZ());
+            }
+            //Bukkit.getLogger().info("blocks replaced1");
+        }
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void afterChunkPopulate(ChunkPopulateEvent event){
+        BukkitWorld bukkitWorld = this.tcPlugin.worlds.get(event.getWorld().getUID());
+        if (bukkitWorld != null)
+        {
+            ObjectSpawner spawner = new ObjectSpawner(bukkitWorld.getSettings(), bukkitWorld);
+            //Bukkit.getLogger().log(Level.INFO, "{0}, {1}", new Object[]{event.getChunk().getX(), event.getChunk().getZ()});
+            spawner.populate(event.getChunk().getX(), event.getChunk().getZ());
+            //Bukkit.getLogger().info("objects spawned");
+        }
+        
+    }
+    
 }
